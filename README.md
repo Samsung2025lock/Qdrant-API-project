@@ -17,8 +17,7 @@ This project provides a simple REST API built with **Flask** for storing and ret
 
 ## 📁 Project Structure
 
-'''plaintext
-
+```plaintext
 .
 ├── app/
 │ ├── init.py
