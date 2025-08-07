@@ -1,1 +1,10 @@
-# This file marks the app directory as a package.
+# Initialize Flask App
+from flask import Flask
+
+def create_app():
+    app = Flask(__name__)
+
+    from .main import main_bp
+    app.register_blueprint(main_bp)
+
+    return app
