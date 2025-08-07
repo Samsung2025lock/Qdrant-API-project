@@ -1,52 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Qdrant AI Text Store/Search</title>
-</head>
-<body>
-  <h2>Add Text</h2>
-  <form id="addForm">
-    <input type="text" id="textInput" placeholder="Enter text to store" required />
-    <button type="submit">Store</button>
-  </form>
+  <head>
+    <meta charset="UTF-8">
+    <title>Qdrant AI Text Store/Search</title>
+    <style>
+      /* Optional: Some quick CSS for basic layout */
+      body {
+        font-family: Arial, sans-serif;
+        background: #0a0a0a;
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .app-container {
+        background: linear-gradient(135deg, #232526 0%, #414345 100%);
+        max-width: 540px;
+        width: 100%;
+        padding: 32px 28px 28px 28px;
+        border-radius: 18px;
+        box-shadow: 0 6px 32px 0 #000a, 0 1.5px 6px 0 #2228;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      form {
+        margin-bottom: 24px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      input[type="text"] {
+        padding: 10px;
+        width: 68%;
+        margin-right: 10px;
+        border: 1px solid #444;
+        border-radius: 5px;
+        font-size: 1rem;
+        background: #181a20;
+        color: #e0e4f7;
+        transition: border 0.2s;
+      }
+      input[type="text"]:focus {
+        border: 1.5px solid #1976d2;
+        outline: none;
+      }
+      button {
+        padding: 10px 26px;
+        background: linear-gradient(90deg, #1976d2 0%, #00c6fb 100%);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 8px #1976d255;
+        transition: background 0.2s;
+      }
+      button:hover {
+        background: linear-gradient(90deg, #1356a2 0%, #00a6d2 100%);
+      }
+      pre {
+        background: #181a20;
+        color: #e0e4f7;
+        padding: 18px;
+        border-radius: 7px;
+        font-size: 1rem;
+        min-height: 36px;
+        overflow-x: auto;
+        width: 100%;
+        margin: 0;
+      }
+      h2, h3 {
+        color: #fff;
+        margin-bottom: 8px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <h2>Add Text</h2>
+      <form id="addForm">
+        <input
+          type="text"
+          id="textInput"
+          placeholder="Enter text to store"
+          required
+        />
+        <button type="submit">Store</button>
+      </form>
 
-  <h2>Search Text</h2>
-  <form id="searchForm">
-    <input type="text" id="searchInput" placeholder="Enter partial text to search" required />
-    <button type="submit">Search</button>
-  </form>
+      <h2>Search Text</h2>
+      <form id="searchForm">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Enter partial text to search"
+          required
+        />
+        <button type="submit">Search</button>
+      </form>
 
-  <h3>Response:</h3>
-  <pre id="responseBox"></pre>
+      <h3>Response:</h3>
+      <pre id="responseBox"></pre>
+    </div>
 
-  <script>
-    const addForm = document.getElementById('addForm');
-    const searchForm = document.getElementById('searchForm');
-    const responseBox = document.getElementById('responseBox');
+    <script>
+      const addForm = document.getElementById('addForm');
+      const searchForm = document.getElementById('searchForm');
+      const responseBox = document.getElementById('responseBox');
 
-    addForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const text = document.getElementById('textInput').value;
+      addForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = document.getElementById('textInput').value;
 
-      const response = await fetch('/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text })
+        const response = await fetch('/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+
+        const result = await response.json();
+        responseBox.textContent = JSON.stringify(result, null, 2);
       });
 
-      const result = await response.json();
-      responseBox.textContent = JSON.stringify(result, null, 2);
-    });
+      searchForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const query = document.getElementById('searchInput').value;
 
-    searchForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const query = document.getElementById('searchInput').value;
-
-      const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
-      const result = await response.json();
-      responseBox.textContent = JSON.stringify(result, null, 2);
-    });
-  </script>
-</body>
+        const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
+        const result = await response.json();
+        responseBox.textContent = JSON.stringify(result, null, 2);
+      });
+    </script>
+  </body>
 </html>
