@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Qdrant AI Text Store/Search</title>
+</head>
+<body>
+  <h2>Add Text</h2>
+  <form id="addForm">
+    <input type="text" id="textInput" placeholder="Enter text to store" required />
+    <button type="submit">Store</button>
+  </form>
+
+  <h2>Search Text</h2>
+  <form id="searchForm">
+    <input type="text" id="searchInput" placeholder="Enter partial text to search" required />
+    <button type="submit">Search</button>
+  </form>
+
+  <h3>Response:</h3>
+  <pre id="responseBox"></pre>
+
+  <script>
+    const addForm = document.getElementById('addForm');
+    const searchForm = document.getElementById('searchForm');
+    const responseBox = document.getElementById('responseBox');
+
+    addForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = document.getElementById('textInput').value;
+
+      const response = await fetch('/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+
+      const result = await response.json();
+      responseBox.textContent = JSON.stringify(result, null, 2);
+    });
+
+    searchForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const query = document.getElementById('searchInput').value;
+
+      const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
+      const result = await response.json();
+      responseBox.textContent = JSON.stringify(result, null, 2);
+    });
+  </script>
+</body>
+</html>
