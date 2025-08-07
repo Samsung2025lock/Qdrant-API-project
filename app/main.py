@@ -1,26 +1,26 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from app.embedding import get_embedding
-from app.qdrant_client import store_in_qdrant, search_qdrant
+from flask import Blueprint, request, jsonify
+from .embedding import generate_embedding
+from .qdrant_client import upsert_to_qdrant, query_qdrant
 
-app = FastAPI()
+main_bp = Blueprint('main', __name__)
 
-class InputText(BaseModel):
-    text: str
+@main_bp.route('/add', methods=['POST'])
+def add_text():
+    data = request.get_json()
+    text = data.get("text")
+    if not text:
+        return jsonify({"error": "Text is required"}), 400
+    
+    embedding = generate_embedding(text)
+    upsert_to_qdrant(text, embedding)
+    return jsonify({"message": "Text added successfully"})
 
-class QueryText(BaseModel):
-    query: str
-
-@app.post("/store")
-def store_text(data: InputText):
-    embedding = get_embedding(data.text)
-    store_in_qdrant(data.text, embedding)
-    return {"message": "Text stored successfully"}
-
-@app.post("/retrieve")
-def retrieve_text(query: QueryText):
-    embedding = get_embedding(query.query)
-    result = search_qdrant(embedding)
-    if not result:
-        raise HTTPException(status_code=404, detail="No match found")
-    return {"matched_text": result}
+@main_bp.route('/search', methods=['GET'])
+def search_text():
+    query = request.args.get("query")
+    if not query:
+        return jsonify({"error": "Query is required"}), 400
+    
+    embedding = generate_embedding(query)
+    results = query_qdrant(embedding)
+    return jsonify({"results": results})
