@@ -15,6 +15,12 @@ This project provides a simple REST API built with **Flask** for storing and ret
 
 ---
 
+## static image of web page:
+
+![web image of index.html page](<Screenshot 2025-08-07 141450.png>)
+
+---
+
 ## Setup Instructions
 
 ### 1. Clone the Repository
