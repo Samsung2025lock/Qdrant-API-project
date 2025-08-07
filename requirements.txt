@@ -1,5 +1,3 @@
-fastapi
-uvicorn
+Flask
+sentence-transformers
 qdrant-client
-python-dotenv
-numpy
