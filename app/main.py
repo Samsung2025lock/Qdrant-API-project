@@ -1,8 +1,13 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify,send_from_directory
 from .embedding import generate_embedding
 from .qdrant_client import upsert_to_qdrant, query_qdrant
+import os
 
 main_bp = Blueprint('main', __name__)
+
+@main_bp.route('/')
+def index():
+    return send_from_directory(os.path.join(os.path.dirname(__file__),'static'),'index.html')
 
 @main_bp.route('/add', methods=['POST'])
 def add_text():
