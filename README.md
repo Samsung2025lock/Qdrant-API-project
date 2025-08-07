@@ -15,6 +15,16 @@ This project provides a simple REST API built with **Flask** for storing and ret
 
 ---
 
+## Setup Instructions
+
+### 1. Clone the Repository
+<pre>git clone https://github.com/theashishmavii/Qdrant-API-project.git</pre>
+
+### 2. Make sure docker is running
+<pre>docker-compose up --build</pre>
+
+---
+
 ## 📁 Project Structure
 
 ```plaintext
@@ -33,11 +43,3 @@ This project provides a simple REST API built with **Flask** for storing and ret
 └── README.md # You’re here!
 
 ---
-
-## Setup Instructions
-
-### 1. Clone the Repository
-<pre>git clone https://github.com/theashishmavii/Qdrant-API-project.git</pre>
-
-### 2. Make sure docker is running
-<pre>docker-compose up --build</pre>
